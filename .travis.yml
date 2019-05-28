@@ -60,7 +60,7 @@ install:
         fi
         $PIP install wheel
         $PIP install setuptools
-        $PIP install ply pep8 mako
+        $PIP install ply pycodestyle mako
         if [ "$MYPYTHON" != "jython" ]; then
           $PIP install pytest pytest-cov codecov
         fi
@@ -77,7 +77,7 @@ script:
         pytest --cov=pyoracc --runslow
       fi
 
-  - pep8 --exclude=parsetab.py .
+  - pycodestyle --exclude=parsetab.py .
   
 after_success:
   - |
