@@ -225,10 +225,10 @@ class AtfLexer(object):
         return t
 
     def t_ID(self, t):
-        r'[a-zA-Z0-9][a-zA-Z\'\u2019\xb4/\.0-9:\-[\]_\u2080-\u2089]*'
+        r'[a-zA-Z0-9][a-zA-Z\'\xb4\u2019/\.0-9:\-[\]_\u2080-\u2089]*'
         # Map :Right Single Quotation Mark: and :Acute Accent: to :Apostrophe:
-        t.value = t.value.replace(u'\u2019', "'")
         t.value = t.value.replace(u'\xb4', "'")
+        t.value = t.value.replace(u'\u2019', "'")
         t.type = self.resolve_keyword(t.value,
                                       AtfLexer.protocol_keywords +
                                       AtfLexer.dollar_keywords +
@@ -267,17 +267,18 @@ class AtfLexer(object):
     # And certain tokens deviate from that, rather
     # than the other way round as for base state
 
-    # Unicode 2019 is right single quotation
-    # Unicode 02cCA is MODIFIER LETTER ACUTE ACCENT
-    # Unicode 2032  is PRIME
+    # Unicode 00B4 is ACUTE ACCENT
+    # Unicode 02CA is MODIFIER LETTER ACUTE ACCENT
+    # Unicode 2019 is RIGHT SINGLE QUOTATION MARK
+    # Unicode 2032 is PRIME
     # All of these could be used as prime
     def t_transctrl_ID(self, t):
-        r'[a-zA-Z0-9][a-zA-Z\'\u2019\u2032\u02CA\xb4/\.0-9:\-[\]_' \
+        r'[a-zA-Z0-9][a-zA-Z\'\xb4\u02CA\u2019\u2032/\.0-9:\-[\]_' \
             u'\u2080-\u2089]*'
+        t.value = t.value.replace(u'\xb4', "'")
+        t.value = t.value.replace(u'\u02CA', "'")
         t.value = t.value.replace(u'\u2019', "'")
         t.value = t.value.replace(u'\u2032', "'")
-        t.value = t.value.replace(u'\u02CA', "'")
-        t.value = t.value.replace(u'\xb4', "'")
         t.type = self.resolve_keyword(t.value,
                                       AtfLexer.protocol_keywords +
                                       AtfLexer.dollar_keywords +
@@ -410,7 +411,7 @@ class AtfLexer(object):
     # Free text, ended by double new line
 
     terminates_para = \
-        r'(#|@[^i][^{]|&|\Z|(^[0-9]+[\'\u2019\u2032\u02CA\xb4]?\.))'
+        r'(#|@[^i][^{]|&|\Z|(^[0-9]+[\'\xb4\u02CA\u2019\u2032]?\.))'
 
     @lex.TOKEN(r'([^\^\n\r]|(\r?\n(?!\s*\r?\n)(?!' +
                terminates_para + ')))+')
