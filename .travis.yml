@@ -40,8 +40,6 @@ before_install:
         fi
         if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
           brew update
-          brew upgrade
-          brew upgrade python
           brew install python3
           python3 --version
         fi
